@@ -1,0 +1,15 @@
+<header>
+  <nav class="navbar navbar-expand-md bg-dark">
+    <div class="icon-container">
+      <a routerLink="/welcome/" class="navbar-brand"><img src="/assets/images/todolist_icon.png" class="icon d-inline-block align-top"></a>
+    </div>
+    <ul class="navbar-nav">
+      <li *ngIf="authenticationService.isUserLoggedIn()"><a routerLink="/welcome/" class="nav-link">Home</a></li>
+      <li *ngIf="authenticationService.isUserLoggedIn()"><a routerLink ="/todos" class="nav-link">Todos</a></li>
+    </ul>
+    <ul class="navbar-nav navbar-collapse justify-content-end">
+      <li *ngIf="!authenticationService.isUserLoggedIn()"><a routerLink ="/login" class="btn btn-success">Login</a></li>
+      <li *ngIf="authenticationService.isUserLoggedIn()"><a routerLink ="/logout" class="btn btn-success">Logout</a></li>
+    </ul>
+  </nav>
+</header>

@@ -1,0 +1,10 @@
+.icon-container{
+    height:60px;
+    overflow: hidden;
+}
+.icon-container > a {
+    height: 100%;
+}
+.icon{
+    height:100%;
+}

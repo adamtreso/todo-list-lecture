@@ -1,0 +1,9 @@
+JWT - Java Web Token authorization
+
+POST request felhasználóval és jelszóval
+válasz a token ha ok
+minden requestnél küldeni kell a tokent a headerben
+
+password titkosítás spring security bCryptPasswordEncoder-el
+
+
