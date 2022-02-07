@@ -1,9 +1,11 @@
-package com.adamtreso.rest.webservices.restfullwebservices.jwt;
+package com.adamtreso.rest.webservices.restfullwebservices.repository;
 
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import com.adamtreso.rest.webservices.restfullwebservices.entity.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long>{

@@ -1,10 +1,10 @@
-package com.adamtreso.rest.webservices.basic.auth;
+package com.adamtreso.rest.webservices.restfullwebservices.common;
 
-public class AuthenticationBean {
+public class HelloWorldBean {
 
 	private String message;
 	
-	public AuthenticationBean(String message) {
+	public HelloWorldBean(String message) {
 		this.message = message;
 	}
 

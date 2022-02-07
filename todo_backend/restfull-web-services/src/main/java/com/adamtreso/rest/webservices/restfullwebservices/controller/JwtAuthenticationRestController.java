@@ -1,4 +1,4 @@
-package com.adamtreso.rest.webservices.restfullwebservices.jwt.resource;
+package com.adamtreso.rest.webservices.restfullwebservices.controller;
 
 import java.util.Objects;
 
@@ -21,8 +21,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.adamtreso.rest.webservices.restfullwebservices.jwt.JwtTokenUtil;
-import com.adamtreso.rest.webservices.restfullwebservices.jwt.JwtUserPrincipal;
+import com.adamtreso.rest.webservices.restfullwebservices.common.jwt.AuthenticationException;
+import com.adamtreso.rest.webservices.restfullwebservices.common.jwt.JwtTokenRequest;
+import com.adamtreso.rest.webservices.restfullwebservices.common.jwt.JwtTokenResponse;
+import com.adamtreso.rest.webservices.restfullwebservices.common.jwt.JwtTokenUtil;
+import com.adamtreso.rest.webservices.restfullwebservices.service.impl.jwtuserdetailsservice.JwtUserPrincipal;
 
 @RestController
 @CrossOrigin(origins="http://localhost:4200")

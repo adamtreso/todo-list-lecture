@@ -1,4 +1,4 @@
-package com.adamtreso.rest.webservices.restfullwebservices.jwt;
+package com.adamtreso.rest.webservices.restfullwebservices.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

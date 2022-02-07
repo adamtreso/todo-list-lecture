@@ -1,4 +1,4 @@
-package com.adamtreso.rest.webservices.restfullwebservices.jwt;
+package com.adamtreso.rest.webservices.restfullwebservices.common.jwt;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -9,6 +9,8 @@ import java.util.function.Function;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+
+import com.adamtreso.rest.webservices.restfullwebservices.service.impl.jwtuserdetailsservice.JwtUserPrincipal;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Clock;

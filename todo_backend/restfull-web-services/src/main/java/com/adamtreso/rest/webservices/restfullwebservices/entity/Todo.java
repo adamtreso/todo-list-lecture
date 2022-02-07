@@ -1,4 +1,4 @@
-package com.adamtreso.rest.webservices.restfullwebservices.todo;
+package com.adamtreso.rest.webservices.restfullwebservices.entity;
 
 import java.util.Date;
 

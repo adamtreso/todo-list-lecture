@@ -1,4 +1,4 @@
-package com.adamtreso.rest.webservices.restfullwebservices.jwt;
+package com.adamtreso.rest.webservices.restfullwebservices.service.impl.jwtuserdetailsservice;
 
 import java.io.IOException;
 import java.io.Serializable;

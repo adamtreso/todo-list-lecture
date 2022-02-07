@@ -1,4 +1,4 @@
-package com.adamtreso.rest.webservices.restfullwebservices.jwt;
+package com.adamtreso.rest.webservices.restfullwebservices.service;
 
 import java.util.Optional;
 
@@ -7,6 +7,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import com.adamtreso.rest.webservices.restfullwebservices.entity.User;
+import com.adamtreso.rest.webservices.restfullwebservices.repository.UserRepository;
+import com.adamtreso.rest.webservices.restfullwebservices.service.impl.jwtuserdetailsservice.JwtUserPrincipal;
 
 @Service
 public class JwtUserDetailsService implements UserDetailsService {

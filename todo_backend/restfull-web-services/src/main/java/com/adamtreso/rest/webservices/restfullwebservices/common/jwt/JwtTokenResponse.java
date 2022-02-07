@@ -1,4 +1,4 @@
-package com.adamtreso.rest.webservices.restfullwebservices.jwt.resource;
+package com.adamtreso.rest.webservices.restfullwebservices.common.jwt;
 
 import java.io.Serializable;
 

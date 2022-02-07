@@ -1,4 +1,4 @@
-package com.adamtreso.rest.webservices.restfullwebservices.jwt;
+package com.adamtreso.rest.webservices.restfullwebservices.service.impl.jwtuserdetailsservice;
 
 import java.io.IOException;
 
@@ -18,6 +18,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+
+import com.adamtreso.rest.webservices.restfullwebservices.common.jwt.JwtTokenUtil;
 
 import io.jsonwebtoken.ExpiredJwtException;
 
