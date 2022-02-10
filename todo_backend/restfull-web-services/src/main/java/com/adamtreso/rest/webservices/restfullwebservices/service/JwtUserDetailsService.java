@@ -9,26 +9,24 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.adamtreso.rest.webservices.restfullwebservices.entity.User;
-import com.adamtreso.rest.webservices.restfullwebservices.repository.UserRepository;
 import com.adamtreso.rest.webservices.restfullwebservices.service.impl.jwtuserdetailsservice.JwtUserPrincipal;
+import com.adamtreso.rest.webservices.restfullwebservices.test.UserRepository;
 
 @Service
 public class JwtUserDetailsService implements UserDetailsService {
 
-  @Autowired
-  private UserRepository userRepos;
+	@Autowired
+	private UserRepository userRepos;
 
-  @Override
-  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    Optional<User> response = userRepos.findByUsername(username);
+	@Override
+	public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
+		Optional<User> response = userRepos.findByUsername(username);
 
-    if (response.isEmpty()) {
-      throw new UsernameNotFoundException(String.format("USER_NOT_FOUND '%s'.", username));
-    }
+		if (!response.isPresent()) {
+			throw new UsernameNotFoundException(String.format("USER_NOT_FOUND '%s'.", username));
+		}
 
-    return new JwtUserPrincipal(response.get());
-  }
+		return new JwtUserPrincipal(response.get());
+	}
 
 }
-
-

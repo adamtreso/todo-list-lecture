@@ -1,0 +1,9 @@
+/*com.adamtreso.rest.webservices.restfullwebservices.test.TodoControllerDeleteTodoIt.testGivenExsistingUserAndIdThenOkRecievedAndRowDeleted*/
+[
+  {
+    "description": "Make the presentation",
+    "id": 1002,
+    "isDone": true,
+    "username": "tadam"
+  }
+]

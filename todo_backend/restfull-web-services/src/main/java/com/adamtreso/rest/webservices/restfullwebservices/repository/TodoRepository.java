@@ -9,8 +9,8 @@ import org.springframework.stereotype.Repository;
 import com.adamtreso.rest.webservices.restfullwebservices.entity.Todo;
 
 @Repository
-public interface TodoRepository extends JpaRepository<Todo, Long>{
-	Optional<List<Todo>> findByUsernameOrderById(String username);
-	
+public interface TodoRepository extends JpaRepository<Todo, Long> {
+	List<Todo> findByUsernameOrderById(String username);
+
 	Optional<Todo> findOneByUsernameAndId(String username, Long id);
 }

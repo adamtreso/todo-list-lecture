@@ -25,6 +25,7 @@ IntegrationTestBase.java:
 	class annotations:
 		@RunWith(SpringRunner.class)
 		@SpringBootTest(classes = <Application>.class)
+		@DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)	- optional - recreates the database every method
 	method annotations:
 		@Test
 

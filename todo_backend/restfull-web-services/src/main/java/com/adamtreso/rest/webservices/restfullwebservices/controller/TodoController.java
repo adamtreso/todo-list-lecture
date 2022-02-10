@@ -2,6 +2,7 @@ package com.adamtreso.rest.webservices.restfullwebservices.controller;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,51 +15,46 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.adamtreso.rest.webservices.restfullwebservices.dto.TodoDto;
 import com.adamtreso.rest.webservices.restfullwebservices.entity.Todo;
 import com.adamtreso.rest.webservices.restfullwebservices.service.TodoService;
 
-@CrossOrigin(origins="http://localhost:4200")
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 public class TodoController {
-	
+
 	@Autowired
 	private TodoService todoService;
-	
+
 	@GetMapping("users/{username}/todos")
-	public ResponseEntity<List<Todo>> getAllTodos(@PathVariable String username){
-		List<Todo> todoList = todoService.getAllTodos(username);
-		if (todoList == null)
-			return ResponseEntity.notFound().build();
-		return ResponseEntity.ok(todoList);
+	public ResponseEntity<List<TodoDto>> getAllTodos(@PathVariable final String username) {
+		Optional<List<TodoDto>> response = todoService.getAllTodos(username);
+		return response.isPresent() ? ResponseEntity.ok(response.get()) : ResponseEntity.notFound().build();
 	}
-	
+
 	@DeleteMapping("users/{username}/todos/{id}")
-	public ResponseEntity<Void> deleteTodo(@PathVariable String username, @PathVariable long id){
+	public ResponseEntity<Void> deleteTodo(@PathVariable final String username, @PathVariable final long id) {
 		boolean isDeleted = todoService.deleteTodo(username, id);
-		if (isDeleted)
-			return ResponseEntity.ok().build();
-		return ResponseEntity.notFound().build();
+		return isDeleted ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
 	}
-	
+
 	@PutMapping("users/{username}/todos/{id}")
-	public ResponseEntity<Todo> updateTodo(@PathVariable String username, @PathVariable long id, @RequestBody Todo todo){
-		Todo updatedTodo = todoService.updateTodo(username, id, todo);
-		if (updatedTodo == null)
-			return ResponseEntity.notFound().build();
-		return ResponseEntity.ok(updatedTodo);
+	public ResponseEntity<TodoDto> updateTodo(
+			@PathVariable final String username,
+			@PathVariable final long id,
+			@RequestBody final Todo todo) {
+		Optional<TodoDto> response = todoService.updateTodo(username, id, todo);
+		return response.isPresent() ? ResponseEntity.ok(response.get()) : ResponseEntity.notFound().build();
 	}
-	
+
 	@PostMapping("users/{username}/todos")
-	public ResponseEntity<Object> createTodo(@PathVariable String username, @RequestBody Todo todo){
-		URI uri = todoService.createTodo(username, todo);
-		return ResponseEntity.created(uri).build();
+	public ResponseEntity<URI> createTodo(@PathVariable final String username, @RequestBody final Todo todo) {
+		return ResponseEntity.created(todoService.createTodo(username, todo)).build();
 	}
-	
+
 	@GetMapping("users/{username}/todos/{id}")
-	public ResponseEntity<Todo> findTodo(@PathVariable String username, @PathVariable long id){
-		Todo todo = todoService.findTodo(username, id);
-		if (todo == null)
-			return ResponseEntity.notFound().build();
-		return ResponseEntity.ok(todo);
+	public ResponseEntity<TodoDto> getTodo(@PathVariable final String username, @PathVariable final long id) {
+		Optional<TodoDto> response = todoService.getTodo(username, id);
+		return response.isPresent() ? ResponseEntity.ok(response.get()) : ResponseEntity.notFound().build();
 	}
 }
