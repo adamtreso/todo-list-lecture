@@ -1,4 +1,4 @@
-/*com.adamtreso.rest.webservices.restfullwebservices.test.TodoControllerUpdateTodoIt.testGivenExsistingUserThenTodosIsRecieved*/
+/*com.adamtreso.rest.webservices.restfullwebservices.test.TodoControllerUpdateTodoIt.testGivenExsistingUserThenTodoIsRecievedAndDatabaseChanged*/
 [
   {
     "description": "Changed value",

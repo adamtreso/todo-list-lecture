@@ -27,10 +27,10 @@ public class TodoService {
 	private UserRepository userRepos;
 
 	public Optional<List<TodoDto>> getAllTodos(final String username) {
-		Optional<User> userResoult = userRepos.findByUsername(username);
-		if (userResoult.isPresent()) {
-			List<Todo> resoult = todoRepos.findByUsernameOrderById(username);
-			return Optional.of(extendedConvService.convert(resoult, TodoDto.class));
+		Optional<User> userResult = userRepos.findByUsername(username);
+		if (userResult.isPresent()) {
+			List<Todo> result = todoRepos.findByUsernameOrderById(username);
+			return Optional.of(extendedConvService.convert(result, TodoDto.class));
 		}
 		return Optional.empty();
 	}
@@ -57,10 +57,15 @@ public class TodoService {
 		return Optional.empty();
 	}
 
-	public URI createTodo(final String username, final Todo todo) {
-		Todo savedTodo = todoRepos.save(todo);
-		String uriString = "users/" + username + "/todos/" + savedTodo.getId();
-		return URI.create(uriString);
+	public Optional<URI> createTodo(final String username, final Todo todo) {
+		Optional<User> userResult = userRepos.findByUsername(username);
+		if (userResult.isPresent()) {
+			todo.setId(null);
+			Todo savedTodo = todoRepos.save(todo);
+			String uriString = "users/" + username + "/todos/" + savedTodo.getId();
+			return Optional.of(URI.create(uriString));
+		}
+		return Optional.empty();
 	}
 
 	public Optional<TodoDto> getTodo(final String username, final long id) {

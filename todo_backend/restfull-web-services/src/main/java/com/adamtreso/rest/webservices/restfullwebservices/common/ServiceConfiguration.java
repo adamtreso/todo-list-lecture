@@ -10,10 +10,8 @@ import org.springframework.context.support.ConversionServiceFactoryBean;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.retry.annotation.EnableRetry;
 
 @SpringBootApplication
-@EnableRetry
 public class ServiceConfiguration {
 
 	public static final String AM_CONVERSION_SERVICE = "amConversionService";

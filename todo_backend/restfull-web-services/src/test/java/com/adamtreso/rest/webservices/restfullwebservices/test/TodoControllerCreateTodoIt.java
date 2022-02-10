@@ -1,34 +1,58 @@
 package com.adamtreso.rest.webservices.restfullwebservices.test;
 
-import static org.hamcrest.CoreMatchers.equalTo;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrlPattern;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.hamcrest.MatcherAssert;
+import java.util.Date;
+
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+
+import com.adamtreso.rest.webservices.restfullwebservices.dto.TodoDto;
+import com.adamtreso.rest.webservices.restfullwebservices.repository.TodoRepository;
+import com.github.karsaig.approvalcrest.jupiter.MatcherAssert;
+
+import lombok.SneakyThrows;
 
 public class TodoControllerCreateTodoIt extends IntegrationTestBase {
+
+	@Autowired
+	private TodoRepository todoRepos;
+
+	private final TodoDto TODO_TO_CREATE = new TodoDto(-1L, TESTED_USER.getUsername(), "New value", new Date(), true);
+	private final TodoDto TODO_TO_CREATE_NONEXSISTING = new TodoDto(-1L, "nonexsistinguser", "Changed value", new Date(), true);
+
 	@Test
+	@SneakyThrows
 	public void testGivenExsistingUserThenTodosIsRecieved() {
 		// GIVEN
 		authenticateTestedUser();
-		HttpUriRequest request = new HttpGet(getServerUrl() + "/users/" + TESTED_USER.getUsername() + "/todos");
+		MockHttpServletRequestBuilder request = post("/users/" + TODO_TO_CREATE.getUsername() + "/todos/")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(TODO_TO_CREATE));
 		// WHEN
-		HttpResponse response = sendRequestWithToken(request);
+		ResultActions resultActions = performWithToken(request);
 		// THEN
-		MatcherAssert.assertThat(response.getStatusLine().getStatusCode(), equalTo(200));
-		MatcherAssert.assertThat(getResponseBody(response), sameJsonAsApprovedIgnoringTargetDate().withUniqueId("other"));
+		resultActions.andExpect(status().isCreated()).andExpect(redirectedUrlPattern("users/" + TODO_TO_CREATE.getUsername() + "/todos/*"));
+		MatcherAssert.assertThat(todoRepos.findByUsernameOrderById(TODO_TO_CREATE.getUsername()), sameJsonAsApprovedIgnoringTargetDate());
 	}
 
 	@Test
+	@SneakyThrows
 	public void testGivenNonExsistingUserThenNotFoundRecieved() {
 		// GIVEN
 		authenticateTestedUser();
-		HttpUriRequest request = new HttpGet(getServerUrl() + "/users/nonexsistinguser/todos");
+		MockHttpServletRequestBuilder request = post("/users/" + TODO_TO_CREATE_NONEXSISTING.getUsername() + "/todos/")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(TODO_TO_CREATE_NONEXSISTING));
 		// WHEN
-		HttpResponse response = sendRequestWithToken(request);
+		ResultActions resultActions = performWithToken(request);
 		// THEN
-		MatcherAssert.assertThat(response.getStatusLine().getStatusCode(), equalTo(404));
+		resultActions.andExpect(status().isNotFound());
+		MatcherAssert.assertThat(todoRepos.findByUsernameOrderById(TODO_TO_CREATE.getUsername()), sameJsonAsApprovedIgnoringTargetDate());
 	}
 }

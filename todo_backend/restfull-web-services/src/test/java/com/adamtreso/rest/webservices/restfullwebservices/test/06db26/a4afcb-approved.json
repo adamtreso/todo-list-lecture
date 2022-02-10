@@ -1,0 +1,21 @@
+/*com.adamtreso.rest.webservices.restfullwebservices.test.TodoControllerCreateTodoIt.testGivenExsistingUserThenTodosIsRecieved*/
+[
+  {
+    "description": "New value",
+    "id": 1,
+    "isDone": true,
+    "username": "tadam"
+  },
+  {
+    "description": "Finish the project",
+    "id": 1001,
+    "isDone": true,
+    "username": "tadam"
+  },
+  {
+    "description": "Make the presentation",
+    "id": 1002,
+    "isDone": true,
+    "username": "tadam"
+  }
+]

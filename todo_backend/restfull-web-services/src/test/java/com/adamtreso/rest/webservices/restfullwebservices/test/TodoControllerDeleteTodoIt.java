@@ -1,41 +1,48 @@
 package com.adamtreso.rest.webservices.restfullwebservices.test;
 
-import static org.hamcrest.CoreMatchers.equalTo;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 import com.adamtreso.rest.webservices.restfullwebservices.repository.TodoRepository;
+import com.github.karsaig.approvalcrest.jupiter.MatcherAssert;
+
+import lombok.SneakyThrows;
 
 public class TodoControllerDeleteTodoIt extends IntegrationTestBase {
 
 	@Autowired
 	private TodoRepository todoRepos;
 
+	private final Long DELETED_ID = 1001L;
+
 	@Test
+	@SneakyThrows
 	public void testGivenExsistingUserAndIdThenOkRecievedAndRowDeleted() {
 		// GIVEN
 		authenticateTestedUser();
-		HttpUriRequest request = new HttpDelete(getServerUrl() + "/users/" + TESTED_USER.getUsername() + "/todos/1001");
+		MockHttpServletRequestBuilder request = delete("/users/" + TESTED_USER.getUsername() + "/todos/" + DELETED_ID);
 		// WHEN
-		HttpResponse response = sendRequestWithToken(request);
+		ResultActions resultActions = performWithToken(request);
 		// THEN
-		MatcherAssert.assertThat(response.getStatusLine().getStatusCode(), equalTo(200));
+		resultActions.andExpect(status().isOk());
 		MatcherAssert.assertThat(todoRepos.findByUsernameOrderById(TESTED_USER.getUsername()), sameJsonAsApprovedIgnoringTargetDate());
 	}
 
 	@Test
+	@SneakyThrows
 	public void testGivenNonExsistingUserThenNotFoundRecieved() {
 		// GIVEN
 		authenticateTestedUser();
-		HttpUriRequest request = new HttpDelete(getServerUrl() + "/users/nonexsistinguser/todos/1001");
+		MockHttpServletRequestBuilder request = delete("/user/nonexsistinguser/todos/" + DELETED_ID);
 		// WHEN
-		HttpResponse response = sendRequestWithToken(request);
+		ResultActions resultActions = performWithToken(request);
 		// THEN
-		MatcherAssert.assertThat(response.getStatusLine().getStatusCode(), equalTo(404));
+		resultActions.andExpect(status().isNotFound());
+		MatcherAssert.assertThat(todoRepos.findByUsernameOrderById(TESTED_USER.getUsername()), sameJsonAsApprovedIgnoringTargetDate());
 	}
 }

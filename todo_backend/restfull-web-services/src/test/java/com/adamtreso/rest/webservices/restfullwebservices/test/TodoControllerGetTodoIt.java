@@ -14,14 +14,17 @@ import com.github.karsaig.approvalcrest.jupiter.MatcherAssert;
 
 import lombok.SneakyThrows;
 
-public class TodoControllerGetAllTodosIt extends IntegrationTestBase {
+public class TodoControllerGetTodoIt extends IntegrationTestBase {
+
+	private final Long GET_ID = 1001L;
 
 	@Test
 	@SneakyThrows
 	public void testGivenExsistingUserThenTodosIsRecieved() {
 		// GIVEN
 		authenticateTestedUser();
-		MockHttpServletRequestBuilder request = get("/users/" + TESTED_USER.getUsername() + "/todos").accept(MediaType.APPLICATION_JSON);
+		MockHttpServletRequestBuilder request =
+				get("/users/" + TESTED_USER.getUsername() + "/todos/" + GET_ID).accept(MediaType.APPLICATION_JSON);
 		// WHEN
 		ResultActions resultActions = performWithToken(request);
 		// THEN
@@ -34,7 +37,19 @@ public class TodoControllerGetAllTodosIt extends IntegrationTestBase {
 	public void testGivenNonExsistingUserThenNotFoundRecieved() {
 		// GIVEN
 		authenticateTestedUser();
-		MockHttpServletRequestBuilder request = get("/users/nonexsistinguser/todos").accept(MediaType.APPLICATION_JSON);
+		MockHttpServletRequestBuilder request = get("/users/nonexsistinguser/todos/" + GET_ID).accept(MediaType.APPLICATION_JSON);
+		// WHEN
+		ResultActions resultActions = performWithToken(request);
+		// THEN
+		resultActions.andExpect(status().isNotFound());
+	}
+
+	@Test
+	@SneakyThrows
+	public void testGivenNonExsistingIdThenNotFoundRecieved() {
+		// GIVEN
+		authenticateTestedUser();
+		MockHttpServletRequestBuilder request = get("/users/" + TESTED_USER.getUsername() + "/todos/12345").accept(MediaType.APPLICATION_JSON);
 		// WHEN
 		ResultActions resultActions = performWithToken(request);
 		// THEN

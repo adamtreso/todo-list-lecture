@@ -1,21 +1,26 @@
 package com.adamtreso.rest.webservices.restfullwebservices.test;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.HttpClientBuilder;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 import com.adamtreso.rest.webservices.restfullwebservices.RestfullWebServicesApplication;
+import com.adamtreso.rest.webservices.restfullwebservices.dto.TokenDto;
 import com.adamtreso.rest.webservices.restfullwebservices.dto.UserDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.karsaig.approvalcrest.jupiter.matcher.Matchers;
@@ -27,15 +32,19 @@ import lombok.SneakyThrows;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = RestfullWebServicesApplication.class, webEnvironment = WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
+@AutoConfigureMockMvc
 public abstract class IntegrationTestBase {
-	@LocalServerPort
-	private int PORT;
 
-	private final String SERVER_DOMAIN = "http://localhost";
+	@Autowired
+	protected MockMvc mockMvc;
+
+	@Value("${jwt.http.request.header}")
+	protected String tokenHeader;
+
 	protected final UserDto TESTED_USER = new UserDto(1L, "tadam", "tadam12345");
 
 	protected final ObjectMapper objectMapper = new ObjectMapper();
-	private TokenJson token;
+	private TokenDto token;
 
 	protected JsonMatcher<Object> sameJsonAsApprovedIgnoringTargetDate() {
 		return sameJsonAsApproved().ignoring("targetDate");
@@ -49,25 +58,21 @@ public abstract class IntegrationTestBase {
 
 	@SneakyThrows
 	protected void authenticateTestedUser() {
-		StringEntity requestEntity = new StringEntity(objectMapper.writeValueAsString(TESTED_USER), ContentType.APPLICATION_JSON);
-		HttpPost postMethod = new HttpPost(getServerUrl() + "/authenticate");
-		postMethod.setEntity(requestEntity);
-		HttpResponse response = HttpClientBuilder.create().build().execute(postMethod);
-		token = objectMapper.readValue(getResponseBody(response), TokenJson.class);
+		MvcResult result = mockMvc
+				.perform(
+						post("/authenticate")
+								.contentType(MediaType.APPLICATION_JSON)
+								.content(objectMapper.writeValueAsString(TESTED_USER))
+								.accept(MediaType.APPLICATION_JSON))
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+				.andExpect(jsonPath("$.token").exists())
+				.andReturn();
+		token = objectMapper.readValue(result.getResponse().getContentAsString(), TokenDto.class);
 	}
 
 	@SneakyThrows
-	protected HttpResponse sendRequestWithToken(final HttpUriRequest request) {
-		request.setHeader("Authorization", "Bearer " + token.getToken());
-		return HttpClientBuilder.create().build().execute(request);
-	}
-
-	@SneakyThrows
-	protected String getResponseBody(final HttpResponse response) {
-		return new BasicResponseHandler().handleResponse(response);
-	}
-
-	protected String getServerUrl() {
-		return SERVER_DOMAIN + ":" + PORT;
+	protected ResultActions performWithToken(final MockHttpServletRequestBuilder request) {
+		request.header(tokenHeader, "Bearer " + token.getToken());
+		return mockMvc.perform(request);
 	}
 }

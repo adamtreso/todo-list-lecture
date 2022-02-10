@@ -1,55 +1,81 @@
 package com.adamtreso.rest.webservices.restfullwebservices.test;
 
-import static org.hamcrest.CoreMatchers.equalTo;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.Date;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpPut;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.StringEntity;
-import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 import com.adamtreso.rest.webservices.restfullwebservices.dto.TodoDto;
 import com.adamtreso.rest.webservices.restfullwebservices.repository.TodoRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.github.karsaig.approvalcrest.jupiter.matcher.Matchers;
+import com.github.karsaig.approvalcrest.jupiter.MatcherAssert;
+
+import lombok.SneakyThrows;
 
 public class TodoControllerUpdateTodoIt extends IntegrationTestBase {
 
 	@Autowired
 	private TodoRepository todoRepos;
 
-	private final TodoDto todoToUpdate = new TodoDto(1001L, TESTED_USER.getUsername(), "Changed value", new Date(), true);
+	private final TodoDto TODO_TO_UPDATE = new TodoDto(1001L, TESTED_USER.getUsername(), "Changed value", new Date(), true);
 
 	@Test
-	public void testGivenExsistingUserThenTodosIsRecieved() throws JsonProcessingException {
+	@SneakyThrows
+	public void testGivenExsistingUserThenTodoIsRecievedAndDatabaseChanged() throws JsonProcessingException {
 		// GIVEN
 		authenticateTestedUser();
-
-		StringEntity requestEntity = new StringEntity(objectMapper.writeValueAsString(todoToUpdate), ContentType.APPLICATION_JSON);
-		HttpPut request = new HttpPut(getServerUrl() + "/users/" + TESTED_USER.getUsername() + "/todos/" + todoToUpdate.getId());
-		request.setEntity(requestEntity);
+		MockHttpServletRequestBuilder request = put("/users/" + TODO_TO_UPDATE.getUsername() + "/todos/" + TODO_TO_UPDATE.getId())
+				.accept(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(TODO_TO_UPDATE))
+				.contentType(MediaType.APPLICATION_JSON);
 		// WHEN
-		HttpResponse response = sendRequestWithToken(request);
+		ResultActions resultActions = performWithToken(request);
 		// THEN
-		MatcherAssert.assertThat(response.getStatusLine().getStatusCode(), equalTo(200));
-		MatcherAssert.assertThat(objectMapper.readValue(getResponseBody(response), TodoDto.class), Matchers.sameBeanAs(todoToUpdate));
-		MatcherAssert.assertThat(todoRepos.findByUsernameOrderById(TESTED_USER.getUsername()), sameJsonAsApprovedIgnoringTargetDate());
+		MvcResult result = resultActions.andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON)).andReturn();
+		MatcherAssert.assertThat(result.getResponse().getContentAsString(), sameJsonAsApprovedIgnoringTargetDate().withUniqueId("response"));
+		MatcherAssert
+				.assertThat(
+						todoRepos.findByUsernameOrderById(TODO_TO_UPDATE.getUsername()),
+						sameJsonAsApprovedIgnoringTargetDate().withUniqueId("table"));
 	}
 
 	@Test
-	public void testGivenNonExsistingUserThenNotFoundRecieved() throws JsonProcessingException {
+	@SneakyThrows
+	public void testGivenNonExsistingUserThenNotFoundRecievedAndDatabaseNotChanged() throws JsonProcessingException {
 		// GIVEN
 		authenticateTestedUser();
-		StringEntity requestEntity = new StringEntity(objectMapper.writeValueAsString(todoToUpdate), ContentType.APPLICATION_JSON);
-		HttpPut request = new HttpPut(getServerUrl() + "/users/nonexsistinguser/todos/" + todoToUpdate.getId());
-		request.setEntity(requestEntity);
+		MockHttpServletRequestBuilder request = put("/users/nonexsistinguser/todos/" + TODO_TO_UPDATE.getId())
+				.accept(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(TODO_TO_UPDATE))
+				.contentType(MediaType.APPLICATION_JSON);;
 		// WHEN
-		HttpResponse response = sendRequestWithToken(request);
+		ResultActions resultActions = performWithToken(request);
 		// THEN
-		MatcherAssert.assertThat(response.getStatusLine().getStatusCode(), equalTo(404));
+		resultActions.andExpect(status().isNotFound());
+		MatcherAssert.assertThat(todoRepos.findByUsernameOrderById(TODO_TO_UPDATE.getUsername()), sameJsonAsApprovedIgnoringTargetDate());
+	}
+
+	@Test
+	@SneakyThrows
+	public void testGivenNonExsistingIdThenNotFoundRecievedAndDatabaseNotChanged() throws JsonProcessingException {
+		// GIVEN
+		authenticateTestedUser();
+		MockHttpServletRequestBuilder request = put("/users/" + TODO_TO_UPDATE.getUsername() + "/todos/12345")
+				.accept(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(TODO_TO_UPDATE))
+				.contentType(MediaType.APPLICATION_JSON);;
+		// WHEN
+		ResultActions resultActions = performWithToken(request);
+		// THEN
+		resultActions.andExpect(status().isNotFound());
+		MatcherAssert.assertThat(todoRepos.findByUsernameOrderById(TODO_TO_UPDATE.getUsername()), sameJsonAsApprovedIgnoringTargetDate());
 	}
 }

@@ -49,7 +49,8 @@ public class TodoController {
 
 	@PostMapping("users/{username}/todos")
 	public ResponseEntity<URI> createTodo(@PathVariable final String username, @RequestBody final Todo todo) {
-		return ResponseEntity.created(todoService.createTodo(username, todo)).build();
+		Optional<URI> response = todoService.createTodo(username, todo);
+		return response.isPresent() ? ResponseEntity.created(response.get()).build() : ResponseEntity.notFound().build();
 	}
 
 	@GetMapping("users/{username}/todos/{id}")
