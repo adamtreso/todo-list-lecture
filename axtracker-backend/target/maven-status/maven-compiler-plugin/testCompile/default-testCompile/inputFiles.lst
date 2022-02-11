@@ -1,0 +1,10 @@
+/home/tothbalint/source/AxTracker/AxTracker/axtracker-backend/src/test/java/hu/agilexpert/axtracker/test/worklogentry/TodoControllerCreateTodoIt.java
+/home/tothbalint/source/AxTracker/AxTracker/axtracker-backend/src/test/java/hu/agilexpert/axtracker/test/worklogentry/TodoControllerGetTodoIt.java
+/home/tothbalint/source/AxTracker/AxTracker/axtracker-backend/src/test/java/hu/agilexpert/axtracker/test/IntegrationTestBase.java
+/home/tothbalint/source/AxTracker/AxTracker/axtracker-backend/src/test/java/hu/agilexpert/axtracker/test/worklogentry/WorkLogEntryControllerUpdateTodoIt.java
+/home/tothbalint/source/AxTracker/AxTracker/axtracker-backend/src/test/java/hu/agilexpert/axtracker/RestfullWebServicesApplicationTests.java
+/home/tothbalint/source/AxTracker/AxTracker/axtracker-backend/src/test/java/hu/agilexpert/axtracker/test/worklogentry/TodoControllerDeleteTodoIt.java
+/home/tothbalint/source/AxTracker/AxTracker/axtracker-backend/src/test/java/hu/agilexpert/axtracker/test/jwt/JwtAuthenticationRestControllerCreateAuthenticationTonen.java
+/home/tothbalint/source/AxTracker/AxTracker/axtracker-backend/src/test/java/hu/agilexpert/axtracker/test/jwt/JwtAuthenticationRestControllerRefreshAndGetAuthenticationToken.java
+/home/tothbalint/source/AxTracker/AxTracker/axtracker-backend/src/test/java/hu/agilexpert/axtracker/test/DateTypeAdapterForJsonMatcher.java
+/home/tothbalint/source/AxTracker/AxTracker/axtracker-backend/src/test/java/hu/agilexpert/axtracker/test/worklogentry/TodoControllerGetAllTodosIt.java

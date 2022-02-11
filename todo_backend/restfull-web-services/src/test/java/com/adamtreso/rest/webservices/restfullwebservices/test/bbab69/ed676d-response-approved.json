@@ -1,7 +1,0 @@
-/*com.adamtreso.rest.webservices.restfullwebservices.test.TodoControllerUpdateTodoIt.testGivenExsistingUserThenTodoIsRecievedAndDatabaseChanged*/
-{
-  "description": "Changed value",
-  "done": true,
-  "id": 1001,
-  "username": "tadam"
-}

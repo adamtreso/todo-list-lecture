@@ -1,0 +1,24 @@
+package hu.agilexpert.axtracker.service;
+
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.stereotype.Component;
+
+import hu.agilexpert.axtracker.dto.WorkLogEntryDto;
+import hu.agilexpert.axtracker.entity.WorkLogEntry;
+
+
+@Component
+public class WorkLogEntryDto2WorkLogEntry implements Converter<WorkLogEntryDto, WorkLogEntry> {
+
+	@Override
+	public WorkLogEntry convert(final WorkLogEntryDto source) {
+		WorkLogEntry resoult = new WorkLogEntry();
+		resoult.setId(source.getId());
+		resoult.setUsername(source.getUsername());
+		resoult.setDescription(source.getDescription());
+		resoult.setTargetDate(source.getTargetDate());
+		resoult.setDone(source.isDone());
+		return resoult;
+	}
+
+}

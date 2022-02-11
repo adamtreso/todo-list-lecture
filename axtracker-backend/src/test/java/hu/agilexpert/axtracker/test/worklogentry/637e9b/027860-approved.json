@@ -1,0 +1,9 @@
+/*hu.agilexpert.axtracker.test.worklogentry.WorkLogEntryControllerDeleteTodoIt.testGivenExsistingUserAndIdThenOkRecievedAndRowDeleted*/
+[
+  {
+    "description": "Make the presentation",
+    "id": 1002,
+    "isDone": true,
+    "username": "gipszjakab"
+  }
+]

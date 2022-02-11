@@ -1,0 +1,11 @@
+hu/agilexpert/axtracker/RestfullWebServicesApplicationTests.class
+hu/agilexpert/axtracker/test/DateTypeAdapterForJsonMatcher.class
+hu/agilexpert/axtracker/test/IntegrationTestBase.class
+hu/agilexpert/axtracker/test/worklogentry/TodoControllerDeleteTodoIt.class
+hu/agilexpert/axtracker/test/DateTypeAdapterForJsonMatcher$1.class
+hu/agilexpert/axtracker/test/worklogentry/TodoControllerCreateTodoIt.class
+hu/agilexpert/axtracker/test/worklogentry/WorkLogEntryControllerUpdateTodoIt.class
+hu/agilexpert/axtracker/test/jwt/JwtAuthenticationRestControllerCreateAuthenticationTonen.class
+hu/agilexpert/axtracker/test/worklogentry/TodoControllerGetTodoIt.class
+hu/agilexpert/axtracker/test/worklogentry/TodoControllerGetAllTodosIt.class
+hu/agilexpert/axtracker/test/jwt/JwtAuthenticationRestControllerRefreshAndGetAuthenticationToken.class

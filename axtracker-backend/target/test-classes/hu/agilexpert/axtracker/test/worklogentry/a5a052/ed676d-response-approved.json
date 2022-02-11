@@ -1,0 +1,7 @@
+/*hu.agilexpert.axtracker.test.worklogentry.WorkLogEntryControllerUpdateTodoIt.testGivenExsistingUserThenTodoIsRecievedAndDatabaseChanged*/
+{
+  "description": "Changed value",
+  "done": true,
+  "id": 1001,
+  "username": "gipszjakab"
+}

@@ -1,0 +1,15 @@
+/*hu.agilexpert.axtracker.test.worklogentry.WorkLogEntryControllerGetAllTodosIt.testGivenExsistingUserThenTodosIsRecieved*/
+[
+  {
+    "description": "Finish the project",
+    "done": true,
+    "id": 1001,
+    "username": "gipszjakab"
+  },
+  {
+    "description": "Make the presentation",
+    "done": true,
+    "id": 1002,
+    "username": "gipszjakab"
+  }
+]
