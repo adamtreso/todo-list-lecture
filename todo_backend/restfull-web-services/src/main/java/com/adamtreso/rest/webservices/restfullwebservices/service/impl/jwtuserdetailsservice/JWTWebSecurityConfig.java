@@ -15,6 +15,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.ldap.authentication.NullLdapAuthoritiesPopulator;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
@@ -36,15 +37,18 @@ public class JWTWebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth
-            .userDetailsService(jwtInMemoryUserDetailsService)
-            .passwordEncoder(new BCryptPasswordEncoder());
-    }
+    	
+    	auth.ldapAuthentication()
+    	.userSearchFilter("(&(objectClass=inetOrgPerson)(uid={0}))")
+        .userSearchBase("cn=users,cn=application-management,dc=agilexpert,dc=hu")
+        .ldapAuthoritiesPopulator(new NullLdapAuthoritiesPopulator())
+        .contextSource()
+         .url("ldap://192.168.1.141:389")
+         .managerDn("cn=admin,dc=agilexpert,dc=hu")
+         .managerPassword("Admin12345");
 
-    //@Bean
-    //public PasswordEncoder passwordEncoderBean() {
-    //    return new BCryptPasswordEncoder();
-    //}
+        // .userDetailsContextMapper(null) -> itt lehet deffiniálni a context-mappert, ezzel lehet testreszabni a userDetals-t
+    }
 
     @Bean
     @Override
@@ -60,7 +64,7 @@ public class JWTWebSecurityConfig extends WebSecurityConfigurerAdapter {
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
             .authorizeRequests()
             .anyRequest().authenticated();
-
+        // be lehet itt is állítani a login page-t
        httpSecurity
             .addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
         
