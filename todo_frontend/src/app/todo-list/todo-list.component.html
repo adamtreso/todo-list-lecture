@@ -1,0 +1,36 @@
+<div class="grid">
+    <h1 class="col-6">My Todos</h1>
+    <div class="col-6">
+        <button style="float: right; margin-top:21px" type="button" pButton label="Add New" (click)="newTodo()"></button>
+    </div>
+    <p-messages class="col-12" [(value)]="messages"></p-messages>
+    <p-table class="col-12" [value]="todos">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Done</th>
+                <th>Description</th>
+                <th>Target Date</th>
+                <th class="center">Update</th>
+                <th class="center">Delete</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-todo>
+            <tr>
+                <td>
+                    <div class="field-checkbox">
+                        <p-checkbox [(ngModel)]="todo.done"
+                                    (onChange)="handleIsDoneChange(todo)"
+                                    [binary]="true" 
+                                    [id]="todo.id"></p-checkbox>
+                        <label *ngIf="todo.done" [for]="todo.id">Done</label>
+                        <label *ngIf="!todo.done" [for]="todo.id">Not Done</label>
+                    </div>
+                </td>
+                <td>{{todo.description}}</td>
+                <td>{{todo.targetDate | date}}</td>
+                <td class="center"><button tpye="button" pButton class="p-button-outlined p-button-rounded p-button-warning" label="Update" (click)="handleUpdateCommand(todo)"></button></td>
+                <td class="center"><button tpye="button" pButton class="p-button-outlined p-button-rounded p-button-danger" label="Delete" (click)="handleDeleteCommand(todo)"></button></td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>

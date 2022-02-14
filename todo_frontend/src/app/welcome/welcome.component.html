@@ -1,0 +1,8 @@
+<div class="center">
+    <h1>Welcome {{authService.getLoggedInUser()}}!</h1>
+    <br>
+    <button type="button" pButton label="To my todos!" routerLink="/todos"></button>
+    <p>To get your daily cutom message:</p>
+    <button type="button" pButton label="Get it!" (click)="handleMessageRequest()"></button>
+    <p>{{welcomeMessage}}</p>
+</div>

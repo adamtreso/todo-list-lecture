@@ -1,0 +1,22 @@
+<div class="grid">
+    <div class="col-12 center">
+        <h1>Todo</h1>
+    </div>
+    <div class="col-6 col-offset-3 grid">
+        <div class="col-12 field">
+            <label for="description" class="block">Description</label>
+            <input class="col-12" id="description" type="text" pInputText [(ngModel)]="todo.description" minlength="5"/>
+        </div>
+        <div class="col-12 field">
+            <label for="targetDate" class="block">Target Date</label>
+            <p-calendar inputId="tagetDate" [showIcon]="true" dateFormat="yy-m-dd" [ngModel]="todo.targetDate | date:'yyyy-MM-dd'" (ngModelChange)="todo.targetDate = $event"></p-calendar>
+        </div>
+        <div class="col-12 field">
+            <p>Is your task done?</p>
+            <p-inputSwitch [(ngModel)]="todo.done"></p-inputSwitch>
+        </div>
+        <div class="col-12 center">
+            <button type="button" pButton label="Save" (click)="saveTodo()"></button>
+        </div>
+    </div>
+</div>

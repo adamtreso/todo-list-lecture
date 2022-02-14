@@ -1,0 +1,9 @@
+<p-menubar [model]="items">
+    <ng-template pTemplate="start">
+        <img routerLink="/welcome" src="../../assets/images/todolist_icon.png" height="40">
+    </ng-template>
+    <ng-template pTemplate="end">
+        <button type="button" *ngIf="!authService.isUserLoggedIn()" label="Login" routerLink="/login" pButton></button>
+        <button type="button" *ngIf="authService.isUserLoggedIn()" label="Logout" routerLink="/logout" pButton></button>
+    </ng-template>
+</p-menubar>
