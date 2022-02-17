@@ -13,10 +13,9 @@ public class WorkLogEntry2WorkLogEntryDto implements Converter<WorkLogEntry, Wor
 	public WorkLogEntryDto convert(final WorkLogEntry source) {
 		WorkLogEntryDto resoult = new WorkLogEntryDto();
 		resoult.setId(source.getId());
-		resoult.setUsername(source.getUsername());
-		resoult.setDescription(source.getDescription());
-		resoult.setTargetDate(source.getTargetDate());
-		resoult.setDone(source.isDone());
+		resoult.setStartDate(source.getStartDate());
+		resoult.setEndDate(source.getEndDate());
+		resoult.setTitle(source.getTitle());
 		return resoult;
 	}
 

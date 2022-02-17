@@ -1,18 +1,18 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
-import { JwtAuthenticationService } from './jwt-authentication.service';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
+import { AuthenticationService } from './authentication.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class RouteGuardService implements CanActivate{
+export class RouteGuardService {
 
-  constructor(private roter : Router, private authenticationService : JwtAuthenticationService) { }
+  constructor(private roter : Router, private authService : AuthenticationService) { }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) : boolean{
-    if (this.authenticationService.isUserLoggedIn())
+    if (this.authService.isUserLoggedIn())
       return true;
-    this.roter.navigate(['login']);
+    this.roter.navigate(['']);
     return false;
   }
 }

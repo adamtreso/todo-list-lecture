@@ -7,15 +7,15 @@ import hu.agilexpert.axtracker.dto.UserDto;
 import hu.agilexpert.axtracker.entity.User;
 
 @Component
-public class UserDto2User implements Converter<UserDto, User>{
+public class UserDto2User implements Converter<UserDto, User> {
 
 	@Override
-	public User convert(UserDto source) {
+	public User convert(final UserDto source) {
 		User resoult = new User();
 		resoult.setId(source.getId());
 		resoult.setUsername(source.getUsername());
-		resoult.setPassword(source.getPassword());
+		resoult.setWorkLogEntrys(null);
 		return resoult;
 	}
-	
+
 }

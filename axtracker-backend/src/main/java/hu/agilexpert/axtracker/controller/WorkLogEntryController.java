@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import hu.agilexpert.axtracker.dto.WorkLogEntryDto;
-import hu.agilexpert.axtracker.entity.WorkLogEntry;
 import hu.agilexpert.axtracker.service.WorkLogEntryService;
 
 @RestController
@@ -26,36 +25,37 @@ public class WorkLogEntryController {
 	@Autowired
 	private WorkLogEntryService workLogEntryService;
 
-	@GetMapping("users/{username}/worklogentrys")
-	public ResponseEntity<List<WorkLogEntryDto>> getAllWorkLogEntrys(@PathVariable final String username) {
-		Optional<List<WorkLogEntryDto>> response = workLogEntryService.getAllWorkLogEntrys(username);
+	@GetMapping("users/{userId}/worklogentrys")
+	public ResponseEntity<List<WorkLogEntryDto>> getAllWorkLogEntrys(@PathVariable final Long userId) {
+		Optional<List<WorkLogEntryDto>> response = workLogEntryService.getAllWorkLogEntrys(userId);
 		return response.isPresent() ? ResponseEntity.ok(response.get()) : ResponseEntity.notFound().build();
 	}
 
-	@DeleteMapping("users/{username}/worklogentrys/{id}")
-	public ResponseEntity<Void> deleteWorkLogEntry(@PathVariable final String username, @PathVariable final long id) {
-		boolean isDeleted = workLogEntryService.deleteWorkLogEntry(username, id);
+	@DeleteMapping("users/{userId}/worklogentrys/{id}")
+	public ResponseEntity<Void> deleteWorkLogEntry(@PathVariable final Long userId, @PathVariable final long id) {
+		boolean isDeleted = workLogEntryService.deleteWorkLogEntry(id);
 		return isDeleted ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
 	}
 
-	@PutMapping("users/{username}/worklogentrys/{id}")
+	@PutMapping("users/{userId}/worklogentrys/{id}")
 	public ResponseEntity<WorkLogEntryDto> updateWorkLogEntry(
-			@PathVariable final String username,
+			@PathVariable final Long userId,
 			@PathVariable final long id,
-			@RequestBody final WorkLogEntry WorkLogEntry) {
-		Optional<WorkLogEntryDto> response = workLogEntryService.updateWorkLogEntry(username, id, WorkLogEntry);
+			@RequestBody final WorkLogEntryDto workLogEntry) {
+		workLogEntry.setId(id);
+		Optional<WorkLogEntryDto> response = workLogEntryService.updateWorkLogEntry(workLogEntry);
 		return response.isPresent() ? ResponseEntity.ok(response.get()) : ResponseEntity.notFound().build();
 	}
 
-	@PostMapping("users/{username}/worklogentrys")
-	public ResponseEntity<URI> createWorkLogEntry(@PathVariable final String username, @RequestBody final WorkLogEntry workLogEntry) {
-		Optional<URI> response = workLogEntryService.createWorkLogEntry(username, workLogEntry);
-		return response.isPresent() ? ResponseEntity.created(response.get()).build() : ResponseEntity.notFound().build();
+	@PostMapping("users/{userId}/worklogentrys")
+	public ResponseEntity<URI> createWorkLogEntry(@PathVariable final Long userId, @RequestBody final WorkLogEntryDto workLogEntry) {
+		Optional<URI> response = workLogEntryService.createWorkLogEntry(userId, workLogEntry);
+		return response.isPresent() ? ResponseEntity.created(response.get()).build() : ResponseEntity.badRequest().build();
 	}
 
-	@GetMapping("users/{username}/worklogentrys/{id}")
-	public ResponseEntity<WorkLogEntryDto> getWorkLogEntry(@PathVariable final String username, @PathVariable final long id) {
-		Optional<WorkLogEntryDto> response = workLogEntryService.getWorkLogEntryDto(username, id);
+	@GetMapping("users/{userId}/worklogentrys/{id}")
+	public ResponseEntity<WorkLogEntryDto> getWorkLogEntry(@PathVariable final Long userId, @PathVariable final long id) {
+		Optional<WorkLogEntryDto> response = workLogEntryService.getWorkLogEntry(id);
 		return response.isPresent() ? ResponseEntity.ok(response.get()) : ResponseEntity.notFound().build();
 	}
 }

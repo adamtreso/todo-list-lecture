@@ -3,6 +3,7 @@ package hu.agilexpert.axtracker.test;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +26,11 @@ import com.github.karsaig.approvalcrest.matcher.GsonConfiguration;
 import com.github.karsaig.approvalcrest.matcher.JsonMatcher;
 
 import hu.agilexpert.axtracker.RestfullWebServicesApplication;
-import hu.agilexpert.axtracker.dto.TokenDto;
+import hu.agilexpert.axtracker.dto.JwtAuthenticationRequestDto;
+import hu.agilexpert.axtracker.dto.JwtTokenDto;
 import hu.agilexpert.axtracker.dto.UserDto;
+import hu.agilexpert.axtracker.service.JwtTokenService;
+import hu.agilexpert.axtracker.service.UserService;
 import lombok.SneakyThrows;
 
 @RunWith(SpringRunner.class)
@@ -38,17 +42,21 @@ public abstract class IntegrationTestBase {
 	@Autowired
 	protected MockMvc mockMvc;
 
+	@Autowired
+	protected ObjectMapper objectMapper;
+
+	@Autowired
+	protected JwtTokenService jwtTokenService;
+
+	@Autowired
+	protected UserService userService;
+
 	@Value("${jwt.http.request.header}")
 	protected String tokenHeader;
 
-	protected final UserDto TESTED_USER = new UserDto(1L, "gipszjakab", "a");
+	protected final JwtAuthenticationRequestDto EXSISTING_USER = new JwtAuthenticationRequestDto("gipszjakab", "a");
 
-	protected final ObjectMapper objectMapper = new ObjectMapper();
-	private TokenDto token;
-
-	protected JsonMatcher<Object> sameJsonAsApprovedIgnoringTargetDate() {
-		return sameJsonAsApproved().ignoring("targetDate");
-	}
+	private String token;
 
 	protected JsonMatcher<Object> sameJsonAsApproved() {
 		GsonConfiguration gsonConfiguration = new GsonConfiguration();
@@ -57,22 +65,24 @@ public abstract class IntegrationTestBase {
 	}
 
 	@SneakyThrows
-	protected void authenticateTestedUser() {
-		MvcResult result = mockMvc
-				.perform(
-						post("/authenticate")
-								.contentType(MediaType.APPLICATION_JSON)
-								.content(objectMapper.writeValueAsString(TESTED_USER))
-								.accept(MediaType.APPLICATION_JSON))
+	protected UserDto authenticateUser(final JwtAuthenticationRequestDto requestData) {
+		MockHttpServletRequestBuilder request = post("/authenticate")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(EXSISTING_USER))
+				.accept(MediaType.APPLICATION_JSON);
+		ResultActions resultActions = mockMvc.perform(request);
+		MvcResult result = resultActions
+				.andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("$.token").exists())
 				.andReturn();
-		token = objectMapper.readValue(result.getResponse().getContentAsString(), TokenDto.class);
+		token = objectMapper.readValue(result.getResponse().getContentAsString(), JwtTokenDto.class).getToken();
+		return userService.getUser(jwtTokenService.getSubject(token)).get();
 	}
 
 	@SneakyThrows
 	protected ResultActions performWithToken(final MockHttpServletRequestBuilder request) {
-		request.header(tokenHeader, "Bearer " + token.getToken());
+		request.header(tokenHeader, "Bearer " + token);
 		return mockMvc.perform(request);
 	}
 }

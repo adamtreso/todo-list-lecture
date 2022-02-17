@@ -1,15 +1,23 @@
 /*hu.agilexpert.axtracker.test.worklogentry.WorkLogEntryControllerUpdateTodoIt.testGivenExsistingUserThenTodoIsRecievedAndDatabaseChanged*/
-[
-  {
-    "description": "Changed value",
-    "id": 1001,
-    "isDone": true,
-    "username": "gipszjakab"
-  },
-  {
-    "description": "Make the presentation",
-    "id": 1002,
-    "isDone": true,
-    "username": "gipszjakab"
-  }
-]
+{
+  "value": [
+    {
+      "endDate": "Jan 1, 1970 1:00:00 AM",
+      "id": 1,
+      "startDate": "Jan 1, 1970 1:00:00 AM",
+      "title": "Chenged title"
+    },
+    {
+      "endDate": "Feb 21, 2022 8:00:00 AM",
+      "id": 2,
+      "startDate": "Feb 21, 2022 16:00:00 PM",
+      "title": "AXAM"
+    },
+    {
+      "endDate": "Feb 22, 2022 8:00:00 AM",
+      "id": 3,
+      "startDate": "Feb 22, 2022 14:00:00 PM",
+      "title": "AX Tracker"
+    }
+  ]
+}

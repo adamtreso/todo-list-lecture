@@ -5,7 +5,10 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,18 +24,19 @@ import lombok.ToString;
 @ToString
 public class WorkLogEntry {
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column
-	private String username;
+	@ManyToOne
+	@JoinColumn(nullable = false)
+	private User user;
 
 	@Column
-	private String description;
+	private Date startDate;
 
 	@Column
-	private Date targetDate;
+	private Date endDate;
 
 	@Column
-	private boolean isDone;
+	private String title;
 }

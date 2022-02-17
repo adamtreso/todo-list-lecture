@@ -1,12 +1,7 @@
-.container{
-    text-align: center;
-    padding: 30px;
-}
-
-#next-button{
-    margin-top: 100px;
-}
-
-h1{
-    font-weight: bold;
+.linear-color-text{
+  font-size: 72px;
+  background: linear-gradient(0.25turn,#6265f0, #367a91, #91c4cc);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }

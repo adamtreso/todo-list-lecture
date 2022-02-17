@@ -9,37 +9,37 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
-import hu.agilexpert.axtracker.common.jwt.JwtTokenUtil;
-import hu.agilexpert.axtracker.dto.TokenDto;
+import hu.agilexpert.axtracker.dto.JwtAuthenticationRequestDto;
+import hu.agilexpert.axtracker.dto.JwtTokenDto;
 import hu.agilexpert.axtracker.dto.UserDto;
+import hu.agilexpert.axtracker.service.JwtTokenService;
+import hu.agilexpert.axtracker.service.UserService;
 import hu.agilexpert.axtracker.test.IntegrationTestBase;
 import lombok.SneakyThrows;
 
 public class JwtAuthenticationRestControllerCreateAuthenticationTonen extends IntegrationTestBase {
 
-	private final UserDto TESTED_USER_BAD_PASSWORD = new UserDto(TESTED_USER.getId(), TESTED_USER.getUsername(), "wrongpassword");
-
-	private final UserDto NONEXSISTING_USER = new UserDto(-1L, "nonexsistinguser", "wrongpassword");
-
-	@Autowired
-	private UserDetailsService jwtDetailsService;
+	private final JwtAuthenticationRequestDto EXSISTING_USER_BAD_PASSWORD =
+			new JwtAuthenticationRequestDto(EXSISTING_USER.getUsername(), "wrongpassword");
+	protected final JwtAuthenticationRequestDto NON_EXSISTING_USER = new JwtAuthenticationRequestDto("nonexsisting", "abc");
 
 	@Autowired
-	private JwtTokenUtil jwtTokenUtil;
+	private JwtTokenService jwtTokenService;
+
+	@Autowired
+	private UserService userService;
 
 	@Test
 	@SneakyThrows
-	public void testGivenExsistingUserWithCorrectPasswordThenTokenRecieved() {
+	public void testGivenExsistingUserWithCorrectPasswordThenTokenAndUserRecieved() {
 		// GIVEN
 		MockHttpServletRequestBuilder request = post("/authenticate")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(TESTED_USER))
+				.content(objectMapper.writeValueAsString(EXSISTING_USER))
 				.accept(MediaType.APPLICATION_JSON);
 		// WHEN
 		ResultActions resultActions = mockMvc.perform(request);
@@ -49,37 +49,37 @@ public class JwtAuthenticationRestControllerCreateAuthenticationTonen extends In
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("$.token").exists())
 				.andReturn();
-		TokenDto resultToken = objectMapper.readValue(result.getResponse().getContentAsString(), TokenDto.class);
-		UserDetails userDetails = jwtDetailsService.loadUserByUsername(TESTED_USER.getUsername());
-		assertTrue(jwtTokenUtil.validateToken(resultToken.getToken(), userDetails));
+		String token = objectMapper.readValue(result.getResponse().getContentAsString(), JwtTokenDto.class).getToken();
+		UserDto user = userService.getUser(EXSISTING_USER.getUsername()).get();
+		assertTrue(jwtTokenService.isValidToken(token, user));
 	}
 
 	@Test
 	@SneakyThrows
-	public void testGivenBadPasswordThenUnauthorizedRecieved() {
+	public void testGivenExsistingUserWithBadPasswordThenInvalidCredentialsRecieved() {
 		// GIVEN
 		MockHttpServletRequestBuilder request = post("/authenticate")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(TESTED_USER_BAD_PASSWORD))
+				.content(objectMapper.writeValueAsString(EXSISTING_USER_BAD_PASSWORD))
 				.accept(MediaType.APPLICATION_JSON);
 		// WHEN
 		ResultActions resultActions = mockMvc.perform(request);
 		// THEN
-		resultActions.andExpect(status().isUnauthorized());
+		resultActions.andExpect(status().isUnauthorized()).andExpect(content().string("INVALID_CREDENTIALS"));
 	}
 
 	@Test
 	@SneakyThrows
-	public void testGivenNonExsistingUserThenUnauthorizedRecieved() {
+	public void testGivenNonExsistingUserThenInvalidCredentialsRecieved() {
 		// GIVEN
 		MockHttpServletRequestBuilder request = post("/authenticate")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(NONEXSISTING_USER))
+				.content(objectMapper.writeValueAsString(NON_EXSISTING_USER))
 				.accept(MediaType.APPLICATION_JSON);
 		// WHEN
 		ResultActions resultActions = mockMvc.perform(request);
 		// THEN
-		resultActions.andExpect(status().isUnauthorized());
+		resultActions.andExpect(status().isUnauthorized()).andExpect(content().string("INVALID_CREDENTIALS"));
 	}
 
 	@Test

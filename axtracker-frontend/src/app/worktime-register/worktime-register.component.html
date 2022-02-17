@@ -1,0 +1,29 @@
+<div class="grid p-5">
+    <h1 class="col-6">My workLogEntrys</h1>
+    <div class="col-6">
+        <button style="float: right; margin-top:21px" type="button" pButton label="Add New"></button>
+    </div>
+    <p-messages class="col-12" [(value)]="messages"></p-messages>
+    <p-table class="col-12" [value]="workLogEntrys">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th class="center">Update</th>
+                <th class="center">Delete</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-workLogEntry>
+            <tr>
+                <td>{{workLogEntry.id}}</td>
+                <td>{{workLogEntry.title}}</td>
+                <td>{{workLogEntry.startDate | date: 'MMM dd, yyyy - HH:mm'}}</td>
+                <td>{{workLogEntry.endDate | date: 'MMM dd, yyyy - HH:mm'}}</td>
+                <td class="center"><button tpye="button" pButton class="p-button-outlined p-button-rounded p-button-warning" label="Update" (click)="handleUpdateCommand(workLogEntry)"></button></td>
+                <td class="center"><button tpye="button" pButton class="p-button-outlined p-button-rounded p-button-danger" label="Delete" (click)="handleDeleteCommand(workLogEntry)"></button></td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>

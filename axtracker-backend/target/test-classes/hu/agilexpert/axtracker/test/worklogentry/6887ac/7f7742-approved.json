@@ -1,0 +1,17 @@
+/*hu.agilexpert.axtracker.test.worklogentry.WorkLogEntryControllerDeleteWorkLogEntryIt.testGivenExsistingUserIdAndIdThenOkRecievedAndRowDeletedIt*/
+{
+  "value": [
+    {
+      "endDate": "Feb 21, 2022 8:00:00 AM",
+      "id": 2,
+      "startDate": "Feb 21, 2022 16:00:00 PM",
+      "title": "AXAM"
+    },
+    {
+      "endDate": "Feb 22, 2022 8:00:00 AM",
+      "id": 3,
+      "startDate": "Feb 22, 2022 14:00:00 PM",
+      "title": "AX Tracker"
+    }
+  ]
+}

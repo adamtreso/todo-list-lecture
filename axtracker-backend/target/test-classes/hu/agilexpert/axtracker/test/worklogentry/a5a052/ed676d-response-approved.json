@@ -1,7 +1,7 @@
 /*hu.agilexpert.axtracker.test.worklogentry.WorkLogEntryControllerUpdateTodoIt.testGivenExsistingUserThenTodoIsRecievedAndDatabaseChanged*/
 {
-  "description": "Changed value",
-  "done": true,
-  "id": 1001,
-  "username": "gipszjakab"
+  "endDate": "1970-01-01T00:00:00.001+00:00",
+  "id": 1,
+  "startDate": "1970-01-01T00:00:00.001+00:00",
+  "title": "Chenged title"
 }

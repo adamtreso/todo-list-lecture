@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { JwtAuthenticationService } from '../service/jwt-authentication.service';
+import { Message } from 'primeng/api';
+import { AuthenticationService } from '../service/authentication.service';
 
 @Component({
   selector: 'app-login',
@@ -9,27 +10,31 @@ import { JwtAuthenticationService } from '../service/jwt-authentication.service'
 })
 export class LoginComponent implements OnInit {
 
-  username = ""
-  password = ""
-  errorMessage = "Invalid username or password!"
-  invalidLogin = false
+  username = "";
+  password = "";
+  loginMessages : Message[] = [];
 
-  constructor(private router : Router, private authenticationService : JwtAuthenticationService) { }
+  constructor(
+    private router : Router,
+    private authenticationService : AuthenticationService
+  ) { }
 
   ngOnInit() {
   }
 
   hanleLogin(){
-    this.authenticationService.authenticate(this.username, this.password).subscribe(
-      response => {
-        this.router.navigate(['welcome'])
-        this.invalidLogin = false
+    this.authenticationService.login(this.username, this.password).subscribe({
+      next : (response) => {
+        this.router.navigate(['/welcome'])
       },
-      error => {
+      error : (error) => {
         console.log(error)
-        this.invalidLogin = true
+        this.addMessage({severity:'warn', summary:'Bad credentials', detail:'Incorrect username or password!'});
       }
-    )
+    })
   }
 
+  addMessage(newMessage : Message){
+    this.loginMessages = [newMessage];
+  }
 }

@@ -19,7 +19,7 @@ public class JwtAuthenticationRestControllerRefreshAndGetAuthenticationToken ext
 	@SneakyThrows
 	public void testCorrectTokenThenNewTokenRecieved() {
 		// GIVEN
-		authenticateTestedUser();
+		authenticateUser(EXSISTING_USER);
 		MockHttpServletRequestBuilder request = get("/refresh").accept(MediaType.APPLICATION_JSON);
 		// WHEN
 		ResultActions resultActions = performWithToken(request);
@@ -34,7 +34,7 @@ public class JwtAuthenticationRestControllerRefreshAndGetAuthenticationToken ext
 	@SneakyThrows
 	public void testGivenNoTokenThenUnauthorizedRecieved() {
 		// GIVEN
-		authenticateTestedUser();
+		authenticateUser(EXSISTING_USER);
 		MockHttpServletRequestBuilder request = get("/refresh").accept(MediaType.APPLICATION_JSON);
 		// WHEN
 		ResultActions resultActions = mockMvc.perform(request);
@@ -46,8 +46,8 @@ public class JwtAuthenticationRestControllerRefreshAndGetAuthenticationToken ext
 	@SneakyThrows
 	public void testGivenBadTokenThenUnauthorizedRecieved() {
 		// GIVEN
-		authenticateTestedUser();
-		MockHttpServletRequestBuilder request = get("/refresh").accept(MediaType.APPLICATION_JSON).header(tokenHeader, "NotValidToen");
+		authenticateUser(EXSISTING_USER);
+		MockHttpServletRequestBuilder request = get("/refresh").accept(MediaType.APPLICATION_JSON).header(tokenHeader, "NotValidToken");
 		// WHEN
 		ResultActions resultActions = mockMvc.perform(request);
 		// THEN

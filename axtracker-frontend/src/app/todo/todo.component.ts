@@ -1,66 +1,62 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Todo } from '../list-todos/list-todos.component';
-import { TodoDataService } from '../service/data/todo-data.service';
-import { JwtAuthenticationService } from '../service/jwt-authentication.service';
+// import { Component, OnInit } from '@angular/core';
+// import { ActivatedRoute, Router } from '@angular/router';
+// import { AuthenticationService } from '../service/authentication.service';
+// import { TodoDto, TodoService } from '../service/todo.service';
 
-@Component({
-  selector: 'app-todo',
-  templateUrl: './todo.component.html',
-  styleUrls: ['./todo.component.css']
-})
-export class TodoComponent implements OnInit {
+// @Component({
+//   selector: 'app-todo',
+//   templateUrl: './todo.component.html',
+//   styleUrls: ['./todo.component.css']
+// })
+// export class TodoComponent implements OnInit {
 
-  id:number
-  errorMessage:string
-  todo:Todo
+//   todo:TodoDto;
 
-  constructor(
-    private authService:JwtAuthenticationService,
-    private route:ActivatedRoute,
-    private router:Router,
-    private todoService:TodoDataService
-  ) { }
+//   constructor(
+//     private router : Router,
+//     private route : ActivatedRoute,
+//     private todoService : TodoService,
+//     private authService : AuthenticationService,
+//   ) { }
 
-  ngOnInit() {
-    this.id = this.route.snapshot.params["id"];
-    this.todo = new Todo(this.id, this.authService.getAuthenticatedUser(), '', new Date(), false)
-    if (this.id == -1){
-      //if new todo
-    }else{
-      //if updateing
-      this.todoService.retrieveTodo(this.authService.getAuthenticatedUser(), this.id).subscribe(
-        data => {
-          this.todo = data
-        },
-        error => {
-          this.errorMessage = "Something went wrong!"
-        }
-      )
-    }
-  }
+//   ngOnInit(): void {
+//     let id = this.route.snapshot.params["id"];
+//     console.log(id)
+//     this.todo = new TodoDto(id, this.authService.getLoggedInUser(), "", new Date(), false);
+//     if (this.todo.id != -1){
+//       this.todoService.getTodo(this.todo.id).subscribe({
+//         next : (responseTodo) => {
+//           this.todo.description = responseTodo.description;
+//           this.todo.targetDate = responseTodo.targetDate;
+//           this.todo.done = responseTodo.done;
+//         },
+//         error : (error) => {
+//           console.log(error);
+//         }
+//       });
+//     }
+    
+//   }
 
-  save(){
-    if (this.id == -1){
-      // if new todo
-      this.todoService.addTodo(this.authService.getAuthenticatedUser(), this.todo).subscribe(
-        createdUri => {
-          this.router.navigate(["todos"])
-        },
-        error => {
-          this.errorMessage = error.error.message
-        }
-      )
-    }else{
-      //if updating
-      this.todoService.updateTodo(this.authService.getAuthenticatedUser(), this.id, this.todo).subscribe(
-        data => {
-          this.router.navigate(["todos"])
-        },
-        error => {
-          this.errorMessage = "Someting went wrong"
-        }
-      )
-    }
-    }
-}
+//   saveTodo(){
+//     if (this.todo.id == -1){
+//       this.todoService.addTodo(this.todo).subscribe({
+//         next : () => {
+//           this.router.navigate(['/todos']);
+//         },
+//         error : (error) => {
+//           console.log(error);
+//         }
+//       })
+//     }else{
+//       this.todoService.updateTodo(this.todo).subscribe({
+//         next : () => {
+//           this.router.navigate(['/todos']);
+//         },
+//         error : (error) => {
+//           console.log(error);
+//         }
+//       })
+//     }
+//   }
+// }

@@ -11,8 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class WorkLogEntryDto {
 	private Long id;
-	private String username;
-	private String description;
-	private Date targetDate;
-	private boolean isDone;
+	private Date startDate;
+	private Date endDate;
+	private String title;
 }

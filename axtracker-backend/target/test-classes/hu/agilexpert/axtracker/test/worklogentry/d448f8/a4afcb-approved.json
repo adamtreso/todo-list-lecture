@@ -1,9 +1,0 @@
-/*hu.agilexpert.axtracker.test.worklogentry.WorkLogEntryControllerCreateWorkLogentryIt.testGivenExsistingUserThenTodosIsRecieved*/
-[
-  {
-    "description": "New value",
-    "id": 1,
-    "isDone": true,
-    "username": "gipszjakab"
-  }
-]

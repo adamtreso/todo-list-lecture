@@ -1,17 +1,29 @@
-<div class="container">
-  <h1>Login</h1>
-
-  <div class="alert alert-warning" *ngIf="invalidLogin">{{errorMessage}}</div>
-
-  <div>
-    <div class="form-floating mb-3">
-      <input type="text" class="form-control" id="floatingInput" placeholder="Username" [(ngModel)]="username">
+<div class="grid h-screen w-screen p-0 m-0">
+    <div class="col-6 p-0 image-containter md:col-0">
     </div>
-
-    <div>
-      <input type="password" class="form-control" id="floatingPassword" placeholder="Password" [(ngModel)]="password">
+    <div class="col-6 p-8 shadow-left text-800">
+        <div class="mt-8 mb-4 center">
+            <h1>Welcome to AX Tracker!</h1>
+        </div>
+        <div class="h-6rem w-full my-5">
+            <p-messages [(value)]="loginMessages"></p-messages>
+        </div>
+        <div class="mx-auto w-10 mt-4">
+            <div class="field mb-5">
+                <span class="p-float-label">
+                    <input type="text" id="username_input" pInputText [(ngModel)]="username" (keydown.Enter)="hanleLogin()" class=" w-full">
+                    <label for="username_input">Username</label>
+                </span>
+            </div>
+            <div class="field mb-5">
+                <span class="p-float-label">
+                    <input type="password" id="password_input" pInputText [(ngModel)]="password" (keydown.Enter)="hanleLogin()" class="w-full">
+                    <label for="password_input">Password</label>
+                </span>
+            </div>
+            <div class="center">
+                <button class="p-button-raised p-button-rounded p-button-lg" (click)="hanleLogin()" type="button" pButton label="Login"></button>
+            </div>
+        </div>
     </div>
-
-    <button (click)=hanleLogin() class="btn btn-primary">Login</button>
-  </div>
 </div>

@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 import hu.agilexpert.axtracker.dto.WorkLogEntryDto;
 import hu.agilexpert.axtracker.entity.WorkLogEntry;
 
-
 @Component
 public class WorkLogEntryDto2WorkLogEntry implements Converter<WorkLogEntryDto, WorkLogEntry> {
 
@@ -14,10 +13,10 @@ public class WorkLogEntryDto2WorkLogEntry implements Converter<WorkLogEntryDto, 
 	public WorkLogEntry convert(final WorkLogEntryDto source) {
 		WorkLogEntry resoult = new WorkLogEntry();
 		resoult.setId(source.getId());
-		resoult.setUsername(source.getUsername());
-		resoult.setDescription(source.getDescription());
-		resoult.setTargetDate(source.getTargetDate());
-		resoult.setDone(source.isDone());
+		resoult.setUser(null);
+		resoult.setStartDate(source.getStartDate());
+		resoult.setEndDate(source.getEndDate());
+		resoult.setTitle(source.getTitle());
 		return resoult;
 	}
 

@@ -1,15 +1,26 @@
-<header>
-  <nav class="navbar navbar-expand-md bg-dark">
-    <div class="icon-container">
-      <a routerLink="/welcome/" class="navbar-brand"><img src="/assets/images/todolist_icon.png" class="icon d-inline-block align-top"></a>
+<!-- <div class="h-4rem">
+    <div class="flex align-items-stretch h-full col-12 p-1">
+        <div class="m-2">
+            <a routerLink="/welcome"><img src="../../assets/images/logo.jpg" class="h-full"></a>
+        </div>
+        <div class="flex align-items-stretch ml-auto">
+            <div class="font-semibold flex align-items-center m-2">
+                <p class="">{{authService.getLoggedInUser()}}</p>
+            </div>
+            <div class="border-circle m-2">
+                <img src="../../assets/images/user_icon.png" class="h-full">
+            </div>
+        </div>
     </div>
-    <ul class="navbar-nav">
-      <li *ngIf="authenticationService.isUserLoggedIn()"><a routerLink="/welcome/" class="nav-link">Home</a></li>
-      <li *ngIf="authenticationService.isUserLoggedIn()"><a routerLink ="/todos" class="nav-link">Todos</a></li>
-    </ul>
-    <ul class="navbar-nav navbar-collapse justify-content-end">
-      <li *ngIf="!authenticationService.isUserLoggedIn()"><a routerLink ="/login" class="btn btn-success">Login</a></li>
-      <li *ngIf="authenticationService.isUserLoggedIn()"><a routerLink ="/logout" class="btn btn-success">Logout</a></li>
-    </ul>
-  </nav>
-</header>
+</div>
+<div class="menu-shadow">
+    <p-tabMenu [model]="items" class="p-0 m-0"></p-tabMenu>
+</div> -->
+
+<div>
+    <p-menubar [model]="topItems">
+        <ng-template pTemplate="start">
+            <a routerLink="/welcome"><img src="../../assets/images/logo.jpg" class="h-2rem m-1"></a>
+        </ng-template></p-menubar>
+    <p-tabMenu [model]="bottomItems"></p-tabMenu>
+</div>

@@ -1,7 +1,7 @@
 /*hu.agilexpert.axtracker.test.worklogentry.WorkLogEntryControllerGetTodoIt.testGivenExsistingUserThenTodosIsRecieved*/
 {
-  "description": "Finish the project",
-  "done": true,
-  "id": 1001,
-  "username": "gipszjakab"
+  "endDate": "2022-02-20T07:00:00.000+00:00",
+  "id": 1,
+  "startDate": "2022-02-20T15:00:00.000+00:00",
+  "title": "AX Tracker"
 }
